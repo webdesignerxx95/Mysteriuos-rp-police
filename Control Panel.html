@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysterious RP | Master Control Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-deep: #08090a;
+            --panel-bg: rgba(15, 17, 20, 0.85);
+            --cyan-primary: #8a7773;
+            --cyan-glow: rgba(138, 119, 115, 0.3);
+            --text-main: #f1f5f9;
+            --text-muted: #71717a;
+            --border-color: rgba(138, 119, 115, 0.2);
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% -20%, rgba(140, 109, 89, 0.15) 0%, transparent 60%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #password-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-deep); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+            background-image: radial-gradient(circle at 50% 50%, rgba(140, 109, 89, 0.15) 0%, transparent 80%);
+            animation: fadeIn 0.4s ease;
+        }
+
+        #password-overlay.fade-out {
+            animation: fadeOut 0.4s ease forwards;
+        }
+
+        .pass-box { 
+            background: var(--panel-bg); padding: 40px; border-radius: 16px; 
+            text-align: center; border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8); width: 90%; max-width: 420px;
+            backdrop-filter: blur(10px);
+        }
+        .pass-box h3 { margin-bottom: 10px; font-size: 22px; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .pass-box input { 
+            padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border-color); 
+            background: rgba(0,0,0,0.6); color: #fff; margin: 15px 0; width: 100%; 
+            outline: none; text-align: center; font-size: 16px; transition: 0.3s;
+        }
+        .pass-box input:focus { border-color: var(--cyan-primary); box-shadow: 0 0 10px var(--cyan-glow); }
+        .pass-box button { 
+            padding: 14px; background: var(--cyan-primary); color: white; border: none; 
+            border-radius: 8px; cursor: pointer; width: 100%; font-weight: 700; font-size: 15px; transition: 0.3s; 
+        }
+        .pass-box button:hover { background: #735745; box-shadow: 0 0 15px var(--cyan-glow); }
+        #error-msg { color: var(--danger-color); font-size: 13px; margin-top: 12px; display: none; font-weight: 600; }
+
+        #dashboard-content { display: none; flex: 1; flex-direction: column; justify-content: space-between; animation: fadeIn 0.4s ease; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 6%; background: var(--panel-bg); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
+        .logo span { color: var(--cyan-primary); }
+        .nav-links-flex { display: flex; gap: 12px; }
+        .nav-home-btn { 
+            background: rgba(140, 109, 89, 0.1); color: white; padding: 8px 16px; 
+            border-radius: 6px; text-decoration: none; font-size: 13px; border: 1px solid var(--border-color);
+            transition: 0.3s; display: flex; align-items: center; gap: 8px; font-weight: 600;
+        }
+        .nav-home-btn:hover { background: var(--cyan-primary); box-shadow: 0 0 10px var(--cyan-glow); }
+
+        .container { padding: 40px 20px; max-width: 1000px; margin: auto; width: 100%; }
+        .page-title { color: #fff; margin-bottom: 35px; font-size: 28px; text-align: center; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        .dashboard-tabs {
+            display: flex; gap: 12px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--panel-bg); border: 1px solid var(--border-color);
+            color: var(--text-muted); padding: 12px 20px; border-radius: 10px;
+            cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn.active {
+            background: var(--cyan-primary); color: #fff; border-color: var(--cyan-primary);
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+        .tab-btn:hover:not(.active) { border-color: var(--cyan-primary); color: #fff; }
+
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(15px); }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        .control-card {
+            background: var(--panel-bg); border: 1px solid var(--border-color);
+            padding: 30px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            margin-bottom: 30px; backdrop-filter: blur(10px);
+            position: relative; overflow: hidden;
+        }
+        .control-card::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%;
+            background: var(--cyan-primary);
+        }
+        .control-card h3 { 
+            font-size: 19px; margin-bottom: 25px; color: #fff; 
+            display: flex; align-items: center; gap: 12px; 
+            border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px; 
+        }
+        .control-card h3 i { color: var(--cyan-primary); font-size: 20px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        
+        .form-group label { display: block; font-size: 13px; margin-bottom: 8px; color: #cbd5e1; font-weight: 700; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color);
+            border-radius: 8px; color: #fff; outline: none; font-size: 14px; transition: 0.3s;
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--cyan-primary); box-shadow: 0 0 10px var(--cyan-glow); background: rgba(0,0,0,0.7); }
+
+        .btn-action {
+            background: var(--cyan-primary); color: #fff; border: none; padding: 14px 24px;
+            border-radius: 8px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s;
+            font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .btn-action:hover { background: #735745; box-shadow: 0 0 20px var(--cyan-glow); transform: translateY(-1px); }
+
+        .rules-manage-list { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+        .rule-edit-item {
+            background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 18px;
+            border-radius: 10px; display: flex; flex-direction: column; gap: 12px; transition: 0.3s;
+        }
+        .rule-edit-item:hover { border-color: rgba(140, 109, 89, 0.5); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .rule-edit-item textarea { 
+            width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--border-color); 
+            color: #fff; padding: 12px; border-radius: 6px; font-size: 14px; outline: none;
+        }
+        .rule-edit-item textarea:focus { border-color: var(--cyan-primary); }
+        
+        .rule-actions-flex { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .btn-delete { background: rgba(239, 68, 68, 0.15); color: var(--danger-color); border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
+        .btn-delete:hover { background: var(--danger-color); color: #fff; }
+        
+        .btn-save-single { background: rgba(16, 185, 129, 0.15); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
+        .btn-save-single:hover { background: var(--success-color); color: #fff; }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px; background: var(--success-color);
+            color: white; padding: 14px 28px; border-radius: 8px; font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; z-index: 10000;
+            backdrop-filter: blur(10px); animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        footer {
+            text-align: center; padding: 25px; color: var(--text-muted); font-size: 12px;
+            border-top: 1px solid var(--border-color); background: rgba(8, 9, 10, 0.95);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px 10px; }
+            header { padding: 15px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="password-overlay">
+        <div class="pass-box">
+            <h3><i class="fa-solid fa-lock" style="color: var(--cyan-primary);"></i> لوحة التحكم الشاملة</h3>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 10px;">أدخل كلمة المرور للوصول (الافتراضية: 1234)</p>
+            <input type="password" id="passInput" placeholder="كلمة المرور...">
+            <button onclick="checkPassword()">تسجيل الدخول</button>
+            <div id="error-msg">كلمة المرور خاطئة! يرجى المحاولة مرة أخرى.</div>
+        </div>
+    </div>
+
+    <div id="dashboard-content">
+        <header>
+            <div class="logo">Mysterious <span>RP | Master Control</span></div>
+            <div class="nav-links-flex">
+                <a href="index.html" class="nav-home-btn"><i class="fa-solid fa-home"></i> العودة</a>
+            </div>
+        </header>
+
+        <div class="container">
+            <h1 class="page-title">لوحة التحكم في محتوى الموقع</h1>
+            
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" onclick="switchTab('home-settings-tab', this)"><i class="fa-solid fa-globe"></i> إعدادات الرئيسية</button>
+                <button class="tab-btn" onclick="switchTab('rules-settings-tab', this)"><i class="fa-solid fa-scale-balanced"></i> إدارة القوانين</button>
+                <button class="tab-btn" onclick="switchTab('questions-settings-tab', this)"><i class="fa-solid fa-circle-question"></i> إدارة أسئلة الشرطة</button>
+                <button class="tab-btn" onclick="switchTab('explanations-settings-tab', this)"><i class="fa-solid fa-video"></i> إدارة شروحات الشرطة</button>
+            </div>
+
+            <!-- Tab 1: Home Settings -->
+            <div id="home-settings-tab" class="tab-pane active">
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-globe"></i> إعدادات الصفحة الرئيسية والعسكري</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>عنوان الموقع:</label>
+                            <input type="text" id="siteTitleWord" placeholder="No Access">
+                        </div>
+                        <div class="form-group">
+                            <label>اسم عسكري الأسبوع:</label>
+                            <input type="text" id="soldierName" placeholder="مثال: Roy Martin">
+                        </div>
+                        <div class="form-group">
+                            <label>رتبة عسكري الأسبوع:</label>
+                            <input type="text" id="soldierRank" placeholder="مثال: Senior Officer">
+                        </div>
+                        <div class="form-group">
+                            <label>اكتب كلمة لعسكري الأسبوع:</label>
+                            <input type="text" id="soldierNote" placeholder="كلمة شكر أو تقدير...">
+                        </div>
+                        <div class="form-group">
+                            <label>رابط تيك توك (TikTok URL):</label>
+                            <input type="text" id="tiktokUrl" placeholder="https://www.tiktok.com/@...">
+                        </div>
+                        <div class="form-group">
+                            <label>رابط ديسكورد (Discord URL):</label>
+                            <input type="text" id="discordUrl" placeholder="https://discord.gg/...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>نبذة / وصف السيرفر:</label>
+                            <textarea id="siteBio" rows="2" placeholder="اكتب النبذة التعريفية هنا..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>نص إعلانات الشرطة العاجلة:</label>
+                            <textarea id="policeAlert" rows="2" placeholder="اكتب نص الإعلان هنا..."></textarea>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="saveIndexSettings()"><i class="fa-solid fa-floppy-disk"></i> حفظ إعدادات الصفحة الرئيسية</button>
+                </div>
+            </div>
+
+            <!-- Tab 2: Rules Settings -->
+            <div id="rules-settings-tab" class="tab-pane">
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة قانون جديد لصفحة القوانين</h3>
+                    <div class="form-group full-width" style="margin-top: 10px;">
+                        <label>نص القانون الجديد:</label>
+                        <textarea id="newRuleText" rows="2" placeholder="اكتب نص القانون هنا..."></textarea>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <label style="margin-bottom: 0;">لون الخط للقانون:</label>
+                        <input type="color" id="newRuleColor" value="#94a3b8" style="width: 70px; height: 40px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); border-radius: 6px; cursor: pointer;">
+                    </div>
+                    <button class="btn-action" onclick="addNewRule()"><i class="fa-solid fa-circle-plus"></i> إضافة القانون للموقع</button>
+                </div>
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-list-check"></i> إدارة القوانين الحالية (تعديل / تغيير اللون / حذف)</h3>
+                    <div id="adminRulesContainer" class="rules-manage-list"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Questions Settings -->
+            <div id="questions-settings-tab" class="tab-pane">
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة سؤال جديد</h3>
+                    <div class="form-group full-width" style="margin-top: 10px;">
+                        <label>نص السؤال:</label>
+                        <input type="text" id="newQuestionTitle" placeholder="مثال: 6- ما هي عقوبة ...؟">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>الإجابة / التفاصيل:</label>
+                        <textarea id="newQuestionAnswer" rows="3" placeholder="اكتب تفاصيل الإجابة هنا..."></textarea>
+                    </div>
+                    <button class="btn-action" onclick="addNewQuestion()"><i class="fa-solid fa-circle-plus"></i> إضافة السؤال للموقع</button>
+                </div>
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-list-check"></i> إدارة الأسئلة الحالية (تعديل / حذف)</h3>
+                    <div id="adminQuestionsContainer" class="rules-manage-list"></div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Explanations Settings -->
+            <div id="explanations-settings-tab" class="tab-pane">
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة شرح / فيديو جديد</h3>
+                    <div class="form-group full-width" style="margin-top: 10px;">
+                        <label>عنوان الشرح (بالعربي):</label>
+                        <input type="text" id="newExplTitle" placeholder="مثال: شرح نظام الاستيقاف المروري">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>معرف فيديو اليوتيوب (YouTube Video ID):</label>
+                        <input type="text" id="newExplVideoId" placeholder="مثال: dQw4w9WgXcQ">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>وصف الشرح أو التفاصيل:</label>
+                        <textarea id="newExplDesc" rows="3" placeholder="اكتب تفاصيل أو وصف الشرح هنا..."></textarea>
+                    </div>
+                    <button class="btn-action" onclick="addNewExplanation()"><i class="fa-solid fa-circle-plus"></i> إضافة الشرح للموقع</button>
+                </div>
+                <div class="control-card">
+                    <h3><i class="fa-solid fa-list-check"></i> إدارة الشروحات الحالية (تعديل / حذف)</h3>
+                    <div id="adminExplanationsContainer" class="rules-manage-list"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>جميع الحقوق محفوظة © 2026 Mysterious RP</p>
+            <p style="color: var(--text-muted); font-size: 11px; margin-top: 5px;">System Developed by X.X95</p>
+        </footer>
+    </div>
+
+    <div id="toast" class="toast"><i class="fa-solid fa-circle-check"></i> تم حفظ التغييرات بنجاح!</div>
+
+    <script>
+        const ADMIN_PASSWORD_ENCODED = "NTU3Nzg4OTk="; 
+
+        function checkPassword() {
+            const inputVal = document.getElementById('passInput').value;
+            try {
+                const encodedInput = btoa(inputVal);
+                if(encodedInput === ADMIN_PASSWORD_ENCODED) {
+                    const overlay = document.getElementById('password-overlay');
+                    overlay.classList.add('fade-out'); // تطبيق أنيميشن الخروج بسلسة
+                    
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        const dashboard = document.getElementById('dashboard-content');
+                        dashboard.style.display = 'flex';
+                        sessionStorage.setItem('authMaster', 'true');
+                    }, 300); // انتهاء مدة الأنيميشن (0.3 ثانية) ثم الإخفاء الفعلي
+                    
+                } else {
+                    document.getElementById('error-msg').style.display = 'block';
+                }
+            } catch(e) {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        window.onload = function() {
+            if(sessionStorage.getItem('authMaster') === 'true') {
+                document.getElementById('password-overlay').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'flex';
+            }
+            loadIndexSettingsToInputs();
+            loadAdminRules();
+            loadAdminQuestions();
+            loadAdminExplanations();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
+            toast.classList.remove('fade-out');
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                    toast.classList.remove('fade-out');
+                }, 300);
+            }, 2700);
+        }
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // --- Index Settings ---
+        function saveIndexSettings() {
+            const settings = {
+                titleWord: document.getElementById('siteTitleWord').value,
+                bio: document.getElementById('siteBio').value,
+                soldierName: document.getElementById('soldierName').value,
+                soldierRank: document.getElementById('soldierRank').value,
+                soldierNote: document.getElementById('soldierNote').value,
+                policeAlert: document.getElementById('policeAlert').value,
+                tiktokUrl: document.getElementById('tiktokUrl').value,
+                discordUrl: document.getElementById('discordUrl').value
+            };
+            localStorage.setItem('siteIndexSettings', JSON.stringify(settings));
+            showToast('تم حفظ إعدادات الرئيسية بنجاح!');
+        }
+
+        function loadIndexSettingsToInputs() {
+            let saved = JSON.parse(localStorage.getItem('siteIndexSettings'));
+            if (saved) {
+                document.getElementById('siteTitleWord').value = saved.titleWord || '';
+                document.getElementById('siteBio').value = saved.bio || '';
+                document.getElementById('soldierName').value = saved.soldierName || '';
+                document.getElementById('soldierRank').value = saved.soldierRank || '';
+                document.getElementById('soldierNote').value = saved.soldierNote || '';
+                document.getElementById('policeAlert').value = saved.policeAlert || '';
+                document.getElementById('tiktokUrl').value = saved.tiktokUrl || '';
+                document.getElementById('discordUrl').value = saved.discordUrl || '';
+            }
+        }
+
+        // --- Rules Management ---
+        function getRulesFromStorage() {
+            let rules = JSON.parse(localStorage.getItem('policeRulesList'));
+            if (!rules) {
+                rules = [
+                    { text: "1- التعامل مع المواطنين يكون بحدود العمل فقط، و يكون بشكل إحترافي و رسمي دون التطرق إلى الأشياء الشخصية إذا لم يكن لها سبب كافي", color: "#94a3b8" },
+                    { text: "2- يحق للشرطي أخذ أي إجراء تجاه المواطن بعد وجود أدلة و أسباب كافية لفعل ذلك وتكون ضمن الاجراءات", color: "#94a3b8" }
+                ];
+                localStorage.setItem('policeRulesList', JSON.stringify(rules));
+            }
+            return rules;
+        }
+
+        function loadAdminRules() {
+            const rules = getRulesFromStorage();
+            const container = document.getElementById('adminRulesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            rules.forEach((rule, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'rule-edit-item';
+                itemDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label style="font-size: 12px; color: var(--cyan-primary); font-weight: bold;"><i class="fa-solid fa-shield-halved"></i> قانون رقم (${index + 1})</label>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 12px; color: var(--text-muted);">لون الخط:</span>
+                            <input type="color" id="rule-color-${index}" value="${rule.color || '#94a3b8'}" style="width: 45px; height: 30px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer;">
+                        </div>
+                    </div>
+                    <textarea id="rule-text-${index}" rows="2">${rule.text}</textarea>
+                    <div class="rule-actions-flex">
+                        <button class="btn-save-single" onclick="updateRule(${index})"><i class="fa-solid fa-check"></i> حفظ التعديل واللون</button>
+                        <button class="btn-delete" onclick="deleteRule(${index})"><i class="fa-solid fa-trash"></i> حذف القانون</button>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function addNewRule() {
+            const text = document.getElementById('newRuleText').value.trim();
+            const color = document.getElementById('newRuleColor').value;
+            if(!text) { alert('الرجاء كتابة نص القانون أولاً!'); return; }
+            let rules = getRulesFromStorage();
+            rules.push({ text: text, color: color });
+            localStorage.setItem('policeRulesList', JSON.stringify(rules));
+            document.getElementById('newRuleText').value = '';
+            loadAdminRules();
+            showToast('تمت إضافة القانون بنجاح!');
+        }
+
+        function updateRule(index) {
+            const updatedText = document.getElementById(`rule-text-${index}`).value.trim();
+            const updatedColor = document.getElementById(`rule-color-${index}`).value;
+            if(!updatedText) { alert('لا يمكن ترك القانون فارغاً!'); return; }
+            let rules = getRulesFromStorage();
+            rules[index] = { text: updatedText, color: updatedColor };
+            localStorage.setItem('policeRulesList', JSON.stringify(rules));
+            loadAdminRules();
+            showToast('تم تحديث القانون واللون بنجاح!');
+        }
+
+        function deleteRule(index) {
+            if(confirm('هل أنت متأكد من حذف هذا القانون؟')) {
+                let rules = getRulesFromStorage();
+                rules.splice(index, 1);
+                localStorage.setItem('policeRulesList', JSON.stringify(rules));
+                loadAdminRules();
+                showToast('تم حذف القانون بنجاح!');
+            }
+        }
+
+        // --- Questions Management ---
+        function getQuestionsFromStorage() {
+            let questions = JSON.parse(localStorage.getItem('policeQuestionsList'));
+            if (!questions) {
+                questions = [
+                    { q: "1- متى أوقات فتح التقديم على الشرطة؟", a: "يوم ... ويوم ... الساعة .. مساءً." }
+                ];
+                localStorage.setItem('policeQuestionsList', JSON.stringify(questions));
+            }
+            return questions;
+        }
+
+        function loadAdminQuestions() {
+            const questions = getQuestionsFromStorage();
+            const container = document.getElementById('adminQuestionsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            questions.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'rule-edit-item';
+                itemDiv.innerHTML = `
+                    <label style="font-size: 12px; color: var(--cyan-primary); font-weight: bold;"><i class="fa-solid fa-circle-question"></i> السؤال رقم (${index + 1})</label>
+                    <input type="text" id="q-title-${index}" value="${item.q}" style="width:100%; background:rgba(0,0,0,0.6); border:1px solid var(--border-color); color:#fff; padding:10px; border-radius:6px; margin-bottom:5px;">
+                    <textarea id="q-answer-${index}" rows="2">${item.a}</textarea>
+                    <div class="rule-actions-flex">
+                        <button class="btn-save-single" onclick="updateQuestion(${index})"><i class="fa-solid fa-check"></i> حفظ التعديل</button>
+                        <button class="btn-delete" onclick="deleteQuestion(${index})"><i class="fa-solid fa-trash"></i> حذف السؤال</button>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function addNewQuestion() {
+            const title = document.getElementById('newQuestionTitle').value.trim();
+            const answer = document.getElementById('newQuestionAnswer').value.trim();
+            if(!title || !answer) { alert('الرجاء تعبئة حقل السؤال والإجابة معاً!'); return; }
+            let questions = getQuestionsFromStorage();
+            questions.push({ q: title, a: answer });
+            localStorage.setItem('policeQuestionsList', JSON.stringify(questions));
+            document.getElementById('newQuestionTitle').value = '';
+            document.getElementById('newQuestionAnswer').value = '';
+            loadAdminQuestions();
+            showToast('تمت إضافة السؤال بنجاح!');
+        }
+
+        function updateQuestion(index) {
+            const updatedTitle = document.getElementById(`q-title-${index}`).value.trim();
+            const updatedAnswer = document.getElementById(`q-answer-${index}`).value.trim();
+            if(!updatedTitle || !updatedAnswer) { alert('لا يمكن ترك حقول السؤال فارغة!'); return; }
+            let questions = getQuestionsFromStorage();
+            questions[index] = { q: updatedTitle, a: updatedAnswer };
+            localStorage.setItem('policeQuestionsList', JSON.stringify(questions));
+            loadAdminQuestions();
+            showToast('تم تحديث السؤال بنجاح!');
+        }
+
+        function deleteQuestion(index) {
+            if(confirm('هل أنت متأكد من حذف هذا السؤال؟')) {
+                let questions = getQuestionsFromStorage();
+                questions.splice(index, 1);
+                localStorage.setItem('policeQuestionsList', JSON.stringify(questions));
+                loadAdminQuestions();
+                showToast('تم حذف السؤال بنجاح!');
+            }
+        }
+
+        // --- Explanations Management ---
+        function getExplanationsFromStorage() {
+            let explanations = JSON.parse(localStorage.getItem('policeExplanationsList'));
+            if (!explanations) {
+                explanations = [
+                    { title: "شرح مبدئي", videoId: "YOUR_VIDEO_ID", desc: "وصف الشرح التوضيحي" }
+                ];
+                localStorage.setItem('policeExplanationsList', JSON.stringify(explanations));
+            }
+            return explanations;
+        }
+
+        function loadAdminExplanations() {
+            const explanations = getExplanationsFromStorage();
+            const container = document.getElementById('adminExplanationsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            explanations.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'rule-edit-item';
+                itemDiv.innerHTML = `
+                    <label style="font-size: 12px; color: var(--cyan-primary); font-weight: bold;"><i class="fa-solid fa-video"></i> الشرح رقم (${index + 1})</label>
+                    <input type="text" id="expl-title-${index}" value="${item.title}" style="width:100%; background:rgba(0,0,0,0.6); border:1px solid var(--border-color); color:#fff; padding:10px; border-radius:6px; margin-bottom:5px;">
+                    <input type="text" id="expl-vid-${index}" value="${item.videoId}" style="width:100%; background:rgba(0,0,0,0.6); border:1px solid var(--border-color); color:#fff; padding:10px; border-radius:6px; margin-bottom:5px;">
+                    <textarea id="expl-desc-${index}" rows="2">${item.desc}</textarea>
+                    <div class="rule-actions-flex">
+                        <button class="btn-save-single" onclick="updateExplanation(${index})"><i class="fa-solid fa-check"></i> حفظ التعديل</button>
+                        <button class="btn-delete" onclick="deleteExplanation(${index})"><i class="fa-solid fa-trash"></i> حذف الشرح</button>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function addNewExplanation() {
+            const title = document.getElementById('newExplTitle').value.trim();
+            const videoId = document.getElementById('newExplVideoId').value.trim();
+            const desc = document.getElementById('newExplDesc').value.trim();
+            if(!title || !videoId) { alert('الرجاء تعبئة العنوان ومعرف الفيديو على الأقل!'); return; }
+            let explanations = getExplanationsFromStorage();
+            explanations.push({ title: title, videoId: videoId, desc: desc });
+            localStorage.setItem('policeExplanationsList', JSON.stringify(explanations));
+            document.getElementById('newExplTitle').value = '';
+            document.getElementById('newExplVideoId').value = '';
+            document.getElementById('newExplDesc').value = '';
+            loadAdminExplanations();
+            showToast('تمت إضافة الشرح بنجاح!');
+        }
+
+        function updateExplanation(index) {
+            const updatedTitle = document.getElementById(`expl-title-${index}`).value.trim();
+            const updatedVid = document.getElementById(`expl-vid-${index}`).value.trim();
+            const updatedDesc = document.getElementById(`expl-desc-${index}`).value.trim();
+            if(!updatedTitle || !updatedVid) { alert('لا يمكن ترك الحقول الأساسية فارغة!'); return; }
+            let explanations = getExplanationsFromStorage();
+            explanations[index] = { title: updatedTitle, videoId: updatedVid, desc: updatedDesc };
+            localStorage.setItem('policeExplanationsList', JSON.stringify(explanations));
+            loadAdminExplanations();
+            showToast('تم تحديث الشرح بنجاح!');
+        }
+
+        function deleteExplanation(index) {
+            if(confirm('هل أنت متأكد من حذف هذا الشرح؟')) {
+                let explanations = getExplanationsFromStorage();
+                explanations.splice(index, 1);
+                localStorage.setItem('policeExplanationsList', JSON.stringify(explanations));
+                loadAdminExplanations();
+                showToast('تم حذف الشرح بنجاح!');
+            }
+        }
+    </script>
+</body>
+</html>

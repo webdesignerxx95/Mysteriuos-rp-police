@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysterious RP | Permissions and duties of department</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-deep: #08090a;
+            --panel-bg: rgba(15, 17, 20, 0.85);
+            --cyan-primary: #8a7773;
+            --cyan-glow: rgba(138, 119, 115, 0.3);
+            --text-main: #f1f5f9;
+            --text-muted: #71717a;
+            --border-color: rgba(138, 119, 115, 0.2);
+            --red-alert: #992424;
+            --gold-alert: #adaf0f;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                linear-gradient(rgba(140, 109, 89, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(140, 109, 89, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 50% -20%, rgba(140, 109, 89, 0.15) 0%, transparent 60%);
+            background-size: 30px 30px, 30px 30px, 100% 100%;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        .rules-container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* أنيميشن الدخول والخروج */
+        .details-view {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .details-view.fade-out {
+            animation: simpleFadeOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes simpleFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .details-header-flex {
+            background: var(--panel-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--cyan-primary);
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .details-header-flex h2 {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .details-header-flex h2 i {
+            color: var(--cyan-primary);
+            text-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .back-to-dash-btn {
+            background: rgba(140, 109, 89, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-dash-btn:hover {
+            background: var(--cyan-primary);
+            color: #fff;
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+
+        /* Content Boxes */
+        .content-item-box {
+            background: var(--panel-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .content-item-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 10px; height: 10px;
+            border-top: 2px solid var(--cyan-primary);
+            border-left: 2px solid var(--cyan-primary);
+        }
+        .content-item-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 10px; height: 10px;
+            border-bottom: 2px solid var(--cyan-primary);
+            border-right: 2px solid var(--cyan-primary);
+        }
+
+        .content-item-box h5 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .content-item-box p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .content-item-box p:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .details-header-flex {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rules-container">
+        <div id="sec1" class="details-view">
+            <div class="details-header-flex">
+                <h2 data-en="Military Ranks"><i class="fa-solid fa-star"></i> 7. صلاحيات ومهام الاقسام  </h2>
+                <p style="color: #992424; font-weight: bold;" data-en="The color red is very important.">لون الاحمر مهم جدا</p>
+                <a href="index.html" class="back-to-dash-btn" id="backBtn"><i class="fa-solid fa-arrow-right"></i> <span data-en="Back">العودة</span></a>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Head Of I.A </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له ترقية , صرف نقاط ,خصم نقاط (من اوفسر ون الى ستاف سارجنت)</p>
+                <p>2-  اي تعميم يخص جميع منسوبي الشرطة يجب مراجعة رئاسة الشرطة وتأتي الموافقة منهم</p>
+                <p>3- له كامل الصلاحيات الادارية داخل قسم الشؤون الداخلية</p>
+                <p>4- له كامل الصلاحيات على الافراد</p>
+                <p style="color: #992424; font-weight: bold;">5- يحق له محاسبة من اوفسر ون الى فريست لوتينت وفي حال محاسبة الكاتبن يرفع تقرير الى رئاسة الشرطة ورئاسة الشرطة تتعامل مع الكاتبن</p>
+                <p style="color: #992424; font-weight: bold;">6- مهم جدا : محاسبة ضباط يكون فقط انذارات وفي حال المحاسبة توصل الى كسر او فصل يجب مراجعة رئاسة الشرطة فيها وتأتي الموافقه منهم</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف الكامل على ادارة الشؤون الداخلية </p>
+                <p>2-  مراجعة الشكاوي العسكرية</p>
+                <p>3-  رصد مخالفات الافراد وضباط ومخالفتهم</p>
+                <p>4-  رفع بشكل دوري لرئاسة الشرطة تقارير تخص القسم ( مثال : شكاوي كثير على ضباط معين والخ)</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Deputy Head Of I.A </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له ترقية , صرف نقاط ,خصم نقاط (من اوفسر ون الى ستاف سارجنت)</p>
+                <p>2-  اي تعميم يخص جميع منسوبي الشرطة يجب مراجعة رئاسة الشرطة وتأتي الموافقة منهم</p>
+                <p>3- له كامل الصلاحيات الادارية داخل قسم الشؤون الداخلية</p>
+                <p>4- له كامل الصلاحيات على الافراد</p>
+                <p style="color: #992424; font-weight: bold;">5- يحق له محاسبة من اوفسر ون الى فريست لوتينت وفي حال محاسبة الكاتبن يرفع تقرير الى رئاسة الشرطة ورئاسة الشرطة تتعامل مع الكاتبن</p>
+                <p style="color: #992424; font-weight: bold;">6- مهم جدا : محاسبة ضباط يكون فقط انذارات وفي حال المحاسبة توصل الى كسر او فصل يجب مراجعة رئاسة الشرطة فيها وتأتي الموافقه منهم</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف الكامل على ادارة الشؤون الداخلية </p>
+                <p>2-  مراجعة الشكاوي العسكرية</p>
+                <p>3-  رصد مخالفات الافراد وضباط ومخالفتهم</p>
+                <p>4-  رفع بشكل دوري لرئاسة الشرطة تقارير تخص القسم ( مثال : شكاوي كثير على ضباط معين والخ)</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Management Of I.A </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له محاسبة الافراد من رتبة اوفسر ون الى ستاف سارجنت</p>
+                <p>2-  يحق له تعين او اعفاء اعضاء الشؤون الداخلية بعد مراجعة رئاسة الشؤون الداخلية</p>
+                <p>3- يحق له صرف نقاط وخصم نقاط على الافراد من رتبة اوفسر ون الى ستاف سارجنت وفي حال خصم على ستاف سارجنت يراجع فيها من رئاسة الشؤون الداخلية</p>
+                <p style="color: #992424; font-weight: bold;">4- في حال فصل او كسر ضابط صف يجب مراجعة رئاسة الشؤون الداخلية في قرار فصله او كسره</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على اعضاء الشؤون الداخلية </p>
+                <p>2-  مراجعة الشكاوي العسكرية</p>
+                <p>3-  رصد مخالفات الافراد واعضاء الشؤون الداخلية</p>
+                <p>4-  رفع بشكل دوري لرئاسة الشؤون الداخلية تقارير تخص اعضاء الشؤون الداخلية  (مثال : عضو الشؤون الداخلية محمد القحطاني ممتاز جدا )</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> I.A Summons </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>Nothing</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- يحق له تنفيذ الاستدعائات على الافراد من رتبة اوفسر ون الى سنيور ليد اوفسر </p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Internal Affairs </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>Nothing</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- استقبال الشكاوي ضد افراد الشرطة من رتبة اوفسر ون الى اوفسر ثري واستلامها  </p>
+                <p>2- رصد مخالفات الافراد من اوفسر ون الى اوفسر ثري </p>
+                <p>3- مراقبة التزام الافراد (العتاد العسكري والخ)</p>
+                <p>4-   رفع تقارير الى مسؤولين الشؤون الداخلية عن المخالفين من اوفسر ون الى اوفسر ثري</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Head of P.A </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- اعتماد البرامج والخطط التدريبية</p>
+                <p>2- تعين وتكليف اعضاء ومسؤولين في الاكاديمية</p>
+                <p>3- له كامل الصلاحيات في قسم الاكاديمية</p>
+                <p>4- يحق له فصل الكاديت و سولو كاديت (المخالفة يجب ان تكون تقديريه)</p>
+                <p>5- يحق له ترقية من كاديت الى سولو كاديت ويجب انه يكون مع الجرد الاسبوعي (وفي حال ترقية سولو كاديت الى اوفسر ون يجب اعطاء علم الى شؤون الداخلية )</p>
+                <p>6- استلام اي اعادة تأهيل تحصل في شرطة</p>
+                <p>7- يحق اصدار قرار اعادة تأهيل فقط للكاديت وسولو كاديت </p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على قسم الاكاديمية</p>
+                <p>2- اعتماد مناهج وكتيبات التدريبات العسكرية</p>
+                <p>3- تقيم اداء كل عضو ومسؤول في الاكاديمية</p>
+                <p style="color: #992424; font-weight: bold;">4- رفع تقارير دوريه عن قسم الى رئاسة الشرطة</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;">Deputy Head of P.A </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- اعتماد البرامج والخطط التدريبية</p>
+                <p>2- تعين وتكليف اعضاء ومسؤولين في الاكاديمية</p>
+                <p>3- له كامل الصلاحيات في قسم الاكاديمية</p>
+                <p>4- يحق له فصل الكاديت و سولو كاديت (المخالفة يجب ان تكون تقديريه)</p>
+                <p>5- يحق له ترقية من كاديت الى سولو كاديت ويجب انه يكون مع الجرد الاسبوعي (وفي حال ترقية سولو كاديت الى اوفسر ون يجب اعطاء علم الى شؤون الداخلية )</p>
+                <p>6- استلام اي اعادة تأهيل تحصل في شرطة</p>
+                <p>7- يحق اصدار قرار اعادة تأهيل فقط للكاديت وسولو كاديت </p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على قسم الاكاديمية</p>
+                <p>2- اعتماد مناهج وكتيبات التدريبات العسكرية</p>
+                <p>3- تقيم اداء كل عضو ومسؤول في الاكاديمية</p>
+                <p style="color: #992424; font-weight: bold;">4- رفع تقارير دوريه عن قسم الى رئاسة الشرطة</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;">Management of P.A </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له اعفاء او تعين اعضاء للأكاديمية</p>
+                <p>2- مسؤول عن اي فرد يحصل له اعادة تأهيل من كاديت الى سنيور ليد اوفسر</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على اعضاء الاكاديمية</p>
+                <p>2- متابعة اداء المدربين واعضاء الاكاديمية</p>
+                <p>3- الاشراف على التدريبات العسكرية</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Police Academy </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>nothing...</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- حضور والمساهمه في التدريبات العسكرية</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Wings Commander </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- اعتماد المناهج التدريبيه للونقات</p>
+                <p>2-  يحق له تغير مسؤول الونق في حال كان ما يستحقها</p>
+                <p>3- يحق له سحب ونق في حال كان ما يستحقها او خالف قوانين الونق ( سبب واضح )</p>
+                <p style="color: #992424; font-weight: bold;">4- يحق اضافة نقاط للمدربين في حال تدريب العساكر كحد اقصى 5 في الاسبوع مره واحده</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الإشراف العام على جميع ونقات الشرطة</p>
+                <p>2- وضع الهيكل التنظيمي للونقات بعد موافقة (رئاسة الشرطة)</p>
+                <p>3- مراجعة اداء مسؤولين الونق</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Deputy Wings Commander </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- اعتماد المناهج التدريبيه للونقات</p>
+                <p>2-  يحق له تغير مسؤول الونق في حال كان ما يستحقها</p>
+                <p>3- يحق له سحب ونق في حال كان ما يستحقها او خالف قوانين الونق ( سبب واضح )</p>
+                <p style="color: #992424; font-weight: bold;">4- يحق اضافة نقاط للمدربين في حال تدريب العساكر كحد اقصى 5 في الاسبوع مره واحده</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الإشراف العام على جميع ونقات الشرطة</p>
+                <p>2- وضع الهيكل التنظيمي للونقات بعد موافقة (رئاسة الشرطة)</p>
+                <p>3- مراجعة اداء مسؤولين الونق</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Wings Management </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق تعين او اعفاء ليدر ونق بعد موافقة قيادة الونقات</p>
+                <p>2- يحق له سحب ونق في حال كان ما يستحقها او خالف قوانين الونق ( سبب واضح )</p>
+                <p>3- يحق له إعادة تقييم أو تدريب الونق</p>
+                <p style="color: #992424; font-weight: bold;">4- يحق اضافة نقاط للمدربين في حال تدريب العساكر كحد اقصى 5 في الاسبوع مره واحده</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الإشراف العام على ليدر الونقات</p>
+                <p>2- مراجعة اداء مسؤولين الونق</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Wings Leader </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له سحب ونق من اعضاء الونق التابع له بسبب واضح وصريح ومراجعة (قيادة ومسؤولين الونقات)</p>
+                <p>2- يحق له رفض استلام شخص ونق التابعه له في حال كان يوجد سبب واضح</p>
+                <p style="color: #992424; font-weight: bold;">4- يحق اضافة نقاط للمدربين في حال تدريب العساكر كحد اقصى 5 في الاسبوع مره واحده بعد رفع طلب لمسؤولين الونقات وتأتي الموافقه منهم</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على الونق التابعه له</p>
+                <p>2- فتح التقديم على الونق التابعه له بشكل اسبوعي</p>
+                <p>3- مراجعة ادارة اعضاء الونق التابعين له</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك  ) </p>
+            </div>
+        </div>
+    </div>
+    <footer style="background: transparent !important; backdrop-filter: none !important; border-top: none !important; text-align: center; padding: 20px; margin-top: auto;">
+        <div style="direction: rtl; unicode-bidi: embed; color: var(--text-muted); font-size: 13px;">
+            جميع الحقوق محفوظة <span dir="ltr" style="display: inline-block;">Mysterious Rp CFW 2026 ©</span>
+        </div>
+        <div style="direction: rtl; unicode-bidi: embed; color: var(--text-muted); font-size: 11px; margin-top: 5px;">
+            تصميم وتطوير النظام بواسطة <span dir="ltr" style="display: inline-block;">X.X95</span>
+        </div>
+    </footer>
+        <script>
+        let currentLang = 'ar';
+
+        // تفعيل أنيميشن التلاشي عند الضغط على زر العودة
+        document.getElementById('backBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetUrl = this.getAttribute('href');
+            const viewSection = document.getElementById('sec1');
+            
+            viewSection.classList.add('fade-out');
+            
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 300);
+        });
+
+        function toggleLanguage() {
+            const htmlRoot = document.getElementById('htmlRoot');
+            const elements = document.querySelectorAll('[data-ar][data-en]');
+
+            if (currentLang === 'ar') {
+                currentLang = 'en';
+                htmlRoot.setAttribute('lang', 'en');
+                htmlRoot.setAttribute('dir', 'ltr');
+
+                elements.forEach(el => {
+                    if(el.hasAttribute('data-en')) {
+                        el.textContent = el.getAttribute('data-en');
+                    }
+                });
+            } else {
+                currentLang = 'ar';
+                htmlRoot.setAttribute('lang', 'ar');
+                htmlRoot.setAttribute('dir', 'rtl');
+
+                elements.forEach(el => {
+                    if(el.hasAttribute('data-ar')) {
+                        el.textContent = el.getAttribute('data-ar');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

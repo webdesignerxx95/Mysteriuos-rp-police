@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysterious | Police department</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-deep: #08090a;
+            --panel-bg: rgba(15, 17, 20, 0.85);
+            --cyan-primary: #8a7773;
+            --cyan-glow: rgba(138, 119, 115, 0.3);
+            --blue-accent: #634b3c;
+            --text-main: #f1f5f9;
+            --text-muted: #71717a;
+            --border-color: rgba(138, 119, 115, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                linear-gradient(rgba(138, 119, 115, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 119, 115, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 50% -20%, rgba(138, 119, 115, 0.15) 0%, transparent 60%);
+            background-size: 30px 30px, 30px 30px, 100% 100%;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px var(--cyan-glow); }
+            50% { box-shadow: 0 0 20px rgba(138, 119, 115, 0.6); }
+            100% { box-shadow: 0 0 10px var(--cyan-glow); }
+        }
+
+        header {
+            width: 90%; max-width: 2000px; margin: 20px auto 0;
+            background: var(--panel-bg); backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color); border-top: 3px solid var(--cyan-primary);
+            padding: 12px 25px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 15px; z-index: 100; box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .brand-box { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { width: 40px; height: 40px; border-radius: 40px; object-fit: cover; border: 1px solid var(--cyan-primary); box-shadow: 0 0 10px var(--cyan-glow); }
+        .brand-title { font-weight: 900; font-size: px; letter-spacing: 1px; color: #fff; }
+        .brand-title span { color: var(--cyan-primary); text-shadow: 0 0 10px var(--cyan-glow); }
+
+        nav { display: flex; gap: 8px; }
+        nav a {
+            color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 700;
+            padding: 6px 14px; border-radius: 4px; transition: all 0.3s ease; text-transform: uppercase; border: 1px solid transparent;
+        }
+        nav a:hover, nav a.active {
+            color: var(--cyan-primary); background: rgba(138, 119, 115, 0.08); border-color: var(--border-color); box-shadow: inset 0 0 10px var(--cyan-glow);
+        }
+
+        .header-actions { display: flex; gap: 10px; }
+        .sys-btn {
+            background: rgba(138, 119, 115, 0.05); border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 7px 15px; border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: all 0.3s ease; text-decoration: none;
+        }
+        .sys-btn:hover { background: var(--cyan-primary); color: #fff; box-shadow: 0 0 15px var(--cyan-primary); }
+        .sys-btn.discord { background: var(--cyan-primary); color: #fff; border-color: var(--cyan-primary); animation: pulseGlow 2.5s infinite; }
+
+        .hud-container {
+            width: 92%; max-width: 1200px; margin: 30px auto;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 25px;
+            animation: fadeInUp 1s ease-out;
+        }
+        @media (max-width: 950px) { .hud-container { grid-template-columns: 1fr; } }
+
+        .hud-panel {
+            background: var(--panel-bg); backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color); padding: 30px; position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .hud-panel:hover {
+            border-color: rgba(138, 119, 115, 0.4);
+            transform: translateY(-3px);
+        }
+        .hud-panel::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px;
+            border-top: 2px solid var(--cyan-primary); border-left: 2px solid var(--cyan-primary);
+        }
+        .hud-panel::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px;
+            border-bottom: 2px solid var(--cyan-primary); border-right: 2px solid var(--cyan-primary);
+        }
+
+        .hero-panel { margin-bottom: 25px; }
+        .hero-panel h1 { font-size: 32px; font-weight: 900; margin-bottom: 15px; color: #fff; }
+        .hero-panel h1 span { color: var(--cyan-primary); text-shadow: 0 0 15px var(--cyan-glow); }
+        .hero-panel p { color: var(--text-muted); font-size: 14.5px; line-height: 1.8; }
+
+        .officer-box { display: flex; align-items: center; gap: 20px; margin-top: 15px; }
+        .officer-avatar { width: 75px; height: 75px; border-radius: 6px; object-fit: cover; border: 2px solid var(--cyan-primary); box-shadow: 0 0 15px var(--cyan-glow); transition: transform 0.3s; }
+        .officer-avatar:hover { transform: scale(1.05); }
+        .officer-info h3 { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .officer-rank { font-size: 12px; font-weight: 700; color: var(--cyan-primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .officer-note { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+        .sec-title {
+            font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px;
+        }
+        .sec-title i { color: var(--cyan-primary); text-shadow: 0 0 10px var(--cyan-glow); }
+
+        .dispatch-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+        .dispatch-item { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; padding-bottom: 12px; }
+        .dispatch-item strong { color: #fff; display: block; margin-bottom: 4px; font-size: 14px; }
+
+        .social-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .matrix-btn {
+            height: 50px; background: rgba(138, 119, 115, 0.02); border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+            text-decoration: none; font-size: 18px; transition: all 0.3s ease;
+        }
+        .matrix-btn:hover { background: var(--cyan-primary); color: #fff; border-color: var(--cyan-primary); box-shadow: 0 0 20px var(--cyan-glow); transform: translateY(-2px); }
+
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px; background: rgba(8, 9, 10, 0.95); animation: fadeInDown 1s ease-out; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-box">
+            <img src="Mysterious.gif" alt="Logo" class="brand-logo">
+            <div class="brand-title"><span>Mysterious</span> Police department</div>
+        </div>
+        <nav>
+            <a href="#" class="active">الرئيسية</a>
+            <a href="Policerules2.html">قوانين الشرطة</a>
+            <a href="Section Rules.html">قوانين الأقسام</a>
+            <a href="Police Questions.html">أسئلة الشرطة</a>
+            <a href="Police Administration.html">إدارة الشرطة</a>
+            <a href="Rank Permissions.html">صلاحيات ومهام الرتب</a>
+            <a href="Permissions and Duties of Departments.html">صلاحيات ومهام الاقسام</a>
+            <a href="Police Explanations.html">شروحات الشرطة</a>
+            <a href="Police Schedule.html">جدول الشرطة</a>
+            <a href="Control Panel.html">لوحة التحكم</a>
+        </nav>
+    </header>
+
+    <div class="hud-container">
+        
+        <div>
+            <!-- نبذة عن السيرفر -->
+            <div class="hud-panel hero-panel">
+                <h1>Mysterious <span id="mainTitleDisplay">Police</span></h1>
+                <p id="mainDescDisplay">منظومة الإدارة المركزية والعمليات الأمنية. توفير تفاصيل البروتوكولات، التوزيع الميداني، واللوائح التنظيمية الخاصة بكافة قطاعات الأجهزة الأمنية.</p>
+            </div>
+
+            <!-- عسكري الأسبوع -->
+            <div class="hud-panel">
+                <div class="sec-title">
+                    <i class="fa-solid fa-shield-halved"></i> عسكري الأسبوع
+                </div>
+                <div class="officer-box">
+                    <img src="Mysterious.gif" alt="Officer" class="officer-avatar">
+                    <div>
+                        <h3 id="officerNameDisplay">officer soon</h3>
+                        <div class="officer-rank" id="officerRankDisplay">Soon</div>
+                        <div class="officer-note" id="officerNoteDisplay">تقديرًا لجهوده المميزة، وانضباطه، وتفانيه في أداء مهامه، نتقدم له بخالص الشكر والتقدير، متمنين له دوام التوفيق والتميز.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 25px;">
+            <div class="hud-panel">
+                <div class="sec-title">
+                    <i class="fa-solid fa-terminal"></i> اخر اعلانات الشرطة
+                </div>
+                <ul class="dispatch-list">
+                    <li class="dispatch-item">
+                        <strong></strong>
+                        <span id="policeAnnouncement"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="hud-panel">
+                <div class="sec-title">
+                    <i class="fa-solid fa-network-wired"></i> 
+                </div>
+                <div class="social-matrix">
+                    <a id="tiktokLinkDisplay" href="https://www.tiktok.com/@mysterious9060?_r=1&_t=ZS-98FPuBOxtQa" target="_blank" class="matrix-btn"><i class="fa-brands fa-tiktok"></i></a>
+                    <a id="discordLinkDisplay" href="https://discord.gg/msy" target="_blank" class="matrix-btn"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <span>جميع الحقوق محفوظة © 2026 Mysterious Rp CFW</span> <br>
+        <span style="color: var(--text-muted); font-size: 11px; margin-top: 5px; display: inline-block;">تصميم وتطوير النظام بواسطة X.X95</span>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysterious RP | Rank Permissions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-deep: #08090a;
+            --panel-bg: rgba(15, 17, 20, 0.85);
+            --cyan-primary: #8a7773;
+            --cyan-glow: rgba(138, 119, 115, 0.3);
+            --text-main: #f1f5f9;
+            --text-muted: #71717a;
+            --border-color: rgba(138, 119, 115, 0.2);
+            --red-alert: #992424;
+            --gold-alert: #adaf0f;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                linear-gradient(rgba(140, 109, 89, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(140, 109, 89, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 50% -20%, rgba(140, 109, 89, 0.15) 0%, transparent 60%);
+            background-size: 30px 30px, 30px 30px, 100% 100%;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        .rules-container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* أنيميشن الدخول والخروج */
+        .details-view {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .details-view.fade-out {
+            animation: simpleFadeOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes simpleFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .details-header-flex {
+            background: var(--panel-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--cyan-primary);
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .details-header-flex h2 {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .details-header-flex h2 i {
+            color: var(--cyan-primary);
+            text-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .back-to-dash-btn {
+            background: rgba(140, 109, 89, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-dash-btn:hover {
+            background: var(--cyan-primary);
+            color: #fff;
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+
+        .content-item-box {
+            background: var(--panel-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .content-item-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 10px; height: 10px;
+            border-top: 2px solid var(--cyan-primary);
+            border-left: 2px solid var(--cyan-primary);
+        }
+        .content-item-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 10px; height: 10px;
+            border-bottom: 2px solid var(--cyan-primary);
+            border-right: 2px solid var(--cyan-primary);
+        }
+
+        .content-item-box h5 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .content-item-box p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .content-item-box p:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            background: rgba(8, 9, 10, 0.95);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .details-header-flex {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rules-container">
+        <div id="sec1" class="details-view">
+            <div class="details-header-flex">
+                <h2 data-en="Military Ranks"><i class="fa-solid fa-star"></i> 7. صلاحيات ومهام الرتب</h2>
+                <p style="color: #992424; font-weight: bold;" data-en="The color red is very important.">لون الاحمر مهم جدا</p>
+                <a href="index.html" class="back-to-dash-btn" id="backBtn"><i class="fa-solid fa-arrow-right"></i> <span data-en="Back">العودة</span></a>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Police Commissioner </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- السلطة العليا في إدارة الـجميع القطاعات العسكرية، يمتلك الصلاحية الكاملة والنهائية في جميع القرارات الإدارية والعسكرية والتنظيمية دون وجود أي منصب أعلى منه.</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- قيادة وإدارة جهاز القطاعات العسكرية بالكامل، والإشراف على جميع القطاعات والقيادات</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Chief Of Police </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يمتلك صلاحية إدارة وتوجيه جميع الأقسام والوحدات، واعتماد القرارات الإدارية، ومتابعة الترقيات والعقوبات، وإصدار الأوامر والتعليمات ضمن حدود صلاحياته وتحت إشراف الـPolice Commissioner.</p>
+                <p>2- لدية كامل الصلاحيات الادارية والميدانيه في جميع القطاعات العسكرية</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- قيادة وإدارة جهاز القطاعات العسكري تحت إشراف الـPolice Commissioner، والإشراف على القيادات والأقسام والوحدات العسكرية.</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Commander </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- كامل الصلاحيات الادارية والميدانية</p>
+                <p>1- وايضا هو المسؤول على جميع ضباط</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الإشراف على الادارة العامة لجميع القطاعات العسكرية واقسام الشرطة</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Captain </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- كامل الصلاحيات الميدانيه</p>
+                <p>2- الاشراف العامة للاقسام الادارية</p>
+                <p>3- يحق محاسبة جميع الافراد</p>
+                <p style="color: #992424; font-weight: bold;">4- يحق محاسبة (لوتنيت وفريست لوتنيت) ويجب قبل المحاسبة رفع تقرير لرئاسة الشؤون الداخلية</p>
+                <p>5- يحق له اعادة تأهيل من كاديت الى ستاف سارجنت (يجب سبب واضح للأعادة التأهيل)</p>
+                <p style="color: #992424; font-weight: bold;">6- لديه 50 نقطة اسبوعيه يحق له صرفها لكل فرد وحد اقصى لكل فرد 15 نقطة!!</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- ادارة العمليات اليومية داخل القطاع التابع له وتوزيع المهام على ضباط والاشراف على تدريبات الاكاديمية او اختبار ضباط الجدد ومتابعة تجهيزات الفرق العسكرية</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> First Lieutenant </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- كامل صلاحيات الميدانية</p>
+                <p>2- يحق له ترشيح ترقية فرسيت سارجنت الى ستاف سارجنت الى رئاسة الشؤون الداخلية ويحق لهم رفض او القبول</p>
+                <p>3- يحق له اعادة تأهيل من كاديت الى فريست سارجنت (يجب سبب واضح للأعادة التأهيل)</p>
+                <p style="color: #992424; font-weight: bold;">4- يحق محاسبة جميع الافراد كمحاسبة ميدانيه</p>
+                <p style="color: #992424; font-weight: bold;">5-يحق له محاسبة جميع الافراد (!! ويجب قبلها رفع تقرير لشؤون الداخلية والشؤون الداخلية له الاحقيه في رفض المحاسبة او قبولها)</p>
+                <p style="color: #992424; font-weight: bold;">6- لديه 35 نقطة اسبوعيه يحق له صرفها لكل فرد وحد اقصى لكل فرد 10 نقطة!!</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشرف على تنفيذ العمليات الميدانية اليومية ومتابعة اداء ضباط الصف الاخص فيهم ستاف سارجنت ورفع تقرير لأي مخالفة يفعلها ضباط صف الى شؤون الداخلية والشؤون الداخلية تتعامل معه بموجب القانون</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Lieutenant </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- كامل صلاحيات الميدانية</p>
+                <p>2- يحق له ترشيح ترقية سارجنت الى فريست سارجنت الى رئاسة الشؤون الداخلية ويحق لهم رفض او القبول</p>
+                <p>3- يحق له اعادة تأهيل من كاديت الى سارجنت (يجب سبب واضح للأعادة التأهيل)</p>
+                <p>4- ( يحق لك افشال تفاوض ويجب ان يكون سبب واضح للأفشال )</p>
+                <p style="color: #992424; font-weight: bold;">5- في حال فشل التحرير او تم اقساط الرهينة تتحاسبة انت يامسؤول التحرير</p>
+                <p style="color: #992424; font-weight: bold;">6- يحق محاسبة جميع الافراد كمحاسبة ميدانيه</p>
+                <p style="color: #992424; font-weight: bold;">7-يحق له محاسبة جميع الافراد (!! ويجب قبلها رفع تقرير لشؤون الداخلية والشؤون الداخلية له الاحقيه في رفض المحاسبة او قبولها)</p>
+                <p style="color: #992424; font-weight: bold;">8- لديه 25 نقطة اسبوعيه يحق له صرفها لكل فرد وحد اقصى لكل فرد 10 نقطة!!</p>
+                <p style="color: #992424; font-weight: bold;">9- لايحق له الخروج كأندر كفر مهما كان سبب يجب قبلها تأتي الموافقة من القيادة العليا</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- هذي الرتبه هي بداية سلم ضباط وكضابط ميداني تتبابع اداء ضباط الصف والاخص فريست سارجنت ورفع تقرير لأي مخالفة يفعلها ضباط صف الى شؤون الداخلية والشؤون الداخلية تتعامل معه بموجب القانون</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Staff Sergeant </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له محاسبة جميع الافراد كمحاسبة ميدانيه وفي حال المحاسبة ايداريه يجب رفع تقرير الى شؤون الداخلية ويحق لشؤون رفضها او قبولها</p>
+                <p>2- يحق له ترشيح ترقية من سينور ليد اوفسر الى سارجنت لشؤون الداخلية والشؤون الداخلية له كامل الصلاحيات في رفض او القبول</p>
+                <p style="color: #992424; font-weight: bold;">6- لديه 15 نقطة اسبوعيه يحق له صرفها لكل فرد وحد اقصى لكل فرد 5 نقطة!!</p>
+                <p style="color: #992424; font-weight: bold;">7- لايحق له الخروج كأندر كفر مهما كان سبب يجب قبلها تأتي الموافقة من القيادة العليا</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف الكامل على جميع ضباط الصف ورفع التقارير الى شؤون الداخلية في حال طلب منه</p>
+                <p>2- تقيم اداء ضباط الصف بشكل يومي ورفع تقارير الى شؤون الداخلية في حال اكتشاف اي مخالفة يفعلها ضباط الصف</p>
+                <p>3- في حال تواجده في ميداني هو المسؤول الاول على جميع ضباط الصف</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> First Sergeant </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- له الأحقية التدخل بالحالات الجنائية والتصرف الكامل فيها, ان كان مسؤول الحالة لايجيد التصرف, ولك الأحقية بإستلام الحالة عنه او ايذا كان مسؤول الحالة اعلى منه رتبه</p>
+                <p>2- له الأحقية بالخصم على أي عسكري من سينيور اوفيسر وأقل. بمقدار 5 نقاط تأديبية وقبلها يجب ارفاق تقرير الى شؤون الداخلية ويحق له رفع اعادة تأهيل عسكري الى الاكادمية وتأتي الموافقه منهم</p>
+                <p style="color: #992424; font-weight: bold;">3- لايحق له الخروج كأندر كفر مهما كان سبب يجب قبلها تأتي الموافقة من القيادة العليا</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على سنيور ليد اوفسر ورفع التقارير الى الشؤون الداخلية في حال اكتشاف اي مخالفة يفعلها سنيور ليد اوفسر</p>
+                <p>2- تنظيم الواحدات العسكريه في ميدان</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Sergeant </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- الإشراف على نقاط التفتيش ويحق له اقامة تفتيش في حال عدد وحدات 10 واعلى ويجب ان يكون اعلى رتبه في ميدان</p>
+                <p>2- إصدار أوامر ميدانية فورية</p>
+                <p>3- إعطاء تنبيه أو إنذار شفهي ميداني وافي حال المحاسبة اداريه يجب رفع تقرير الى شؤون الداخلية والشؤون الداخلية له الاحقيه برفض او قبول المحاسبه</p>
+                <p style="color: #992424; font-weight: bold;">4- لايحق له الخروج كأندر كفر مهما كان سبب يجب قبلها تأتي الموافقة من القيادة العليا</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف على سنيور اوفسر ورفع تقرير الى شؤون الداخلية في حال اكتشاف اي مخالفة يفعلها سنيور اوفسر</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+
+            <div class="content-item-box">
+                <h5 style="color: #8a7773ea; font-weight: bold;"> Senior Lead Officer </h5>
+                <p style="color: #f1f5f9; font-weight: bold;"> صلاحيات :</p>
+                <p>1- يحق له محاسبة الافراد من رتبة اوفسر ون الى اوفسر ثري كمحاسبة ميدانيه وفي حال المحاسبة اداريه يجب رفع تقرير الى الشؤون الداخلية والشؤون الداخلية له الاحقيه برفض او قبول المحاسبة</p>
+                <p style="color: #992424; font-weight: bold;">2- لايحق له الخروج كأندر كفر مهما كان سبب يجب قبلها تأتي الموافقة من القيادة العليا</p>
+                <p style="color: #f1f5f9; font-weight: bold;">مهام :</p>
+                <p>1- الاشراف الكامل للافراد من رتبة اوفسر ون الى الافسر ثري وتوجيههم ومتابعة ادائهم الميداني ورفع الحالات التي تتظلب اجرائات ادارية الى شؤون الداخلية</p>
+                <p style="color: #992424; font-weight: bold;"> ( اي شي غير مذكور فوق فهو لايحق لك )</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <span data-ar="جميع الحقوق محفوظة © 2026 Mysterious Rp CFW" data-en="Copyright © 2026 Mysterious Rp CFW. All Rights Reserved.">جميع الحقوق محفوظة © 2026 Mysterious Rp CFW</span> <br>
+        <span style="color: var(--text-muted); font-size: 11px; margin-top: 5px; display: inline-block;" data-ar="تصميم وتطوير النظام بواسطة X.X95" data-en="System Architecture & Design by X.X95">تصميم وتطوير النظام بواسطة X.X95</span>
+    </footer>
+
+    <script>
+        let currentLang = 'ar';
+
+        // تفعيل أنيميشن التلاشي عند الضغط على زر العودة
+        document.getElementById('backBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetUrl = this.getAttribute('href');
+            const viewSection = document.getElementById('sec1');
+            
+            viewSection.classList.add('fade-out');
+            
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 300);
+        });
+
+        function toggleLanguage() {
+            const htmlRoot = document.getElementById('htmlRoot');
+            const elements = document.querySelectorAll('[data-ar][data-en]');
+
+            if (currentLang === 'ar') {
+                currentLang = 'en';
+                htmlRoot.setAttribute('lang', 'en');
+                htmlRoot.setAttribute('dir', 'ltr');
+
+                elements.forEach(el => {
+                    if(el.hasAttribute('data-en')) {
+                        el.textContent = el.getAttribute('data-en');
+                    }
+                });
+            } else {
+                currentLang = 'ar';
+                htmlRoot.setAttribute('lang', 'ar');
+                htmlRoot.setAttribute('dir', 'rtl');
+
+                elements.forEach(el => {
+                    if(el.hasAttribute('data-ar')) {
+                        el.textContent = el.getAttribute('data-ar');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
