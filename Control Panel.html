@@ -229,7 +229,6 @@
                 <button class="tab-btn" onclick="switchTab('explanations-settings-tab', this)"><i class="fa-solid fa-video"></i> إدارة شروحات الشرطة</button>
             </div>
 
-            <!-- Tab 1: Home Settings -->
             <div id="home-settings-tab" class="tab-pane active">
                 <div class="control-card">
                     <h3><i class="fa-solid fa-globe"></i> إعدادات الصفحة الرئيسية والعسكري</h3>
@@ -271,7 +270,6 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Rules Settings -->
             <div id="rules-settings-tab" class="tab-pane">
                 <div class="control-card">
                     <h3><i class="fa-solid fa-plus-circle"></i> إضافة قانون جديد لصفحة القوانين</h3>
@@ -291,7 +289,6 @@
                 </div>
             </div>
 
-            <!-- Tab 3: Questions Settings -->
             <div id="questions-settings-tab" class="tab-pane">
                 <div class="control-card">
                     <h3><i class="fa-solid fa-plus-circle"></i> إضافة سؤال جديد</h3>
@@ -311,7 +308,6 @@
                 </div>
             </div>
 
-            <!-- Tab 4: Explanations Settings -->
             <div id="explanations-settings-tab" class="tab-pane">
                 <div class="control-card">
                     <h3><i class="fa-solid fa-plus-circle"></i> إضافة شرح / فيديو جديد</h3>
@@ -361,7 +357,7 @@
                         const dashboard = document.getElementById('dashboard-content');
                         dashboard.style.display = 'flex';
                         sessionStorage.setItem('authMaster', 'true');
-                    }, 300); // انتهاء مدة الأنيميشن (0.3 ثانية) ثم الإخفاء الفعلي
+                    }, 300);
                     
                 } else {
                     document.getElementById('error-msg').style.display = 'block';
@@ -404,7 +400,6 @@
             btnElement.classList.add('active');
         }
 
-        // --- Index Settings ---
         function saveIndexSettings() {
             const settings = {
                 titleWord: document.getElementById('siteTitleWord').value,
@@ -434,7 +429,6 @@
             }
         }
 
-        // --- Rules Management ---
         function getRulesFromStorage() {
             let rules = JSON.parse(localStorage.getItem('policeRulesList'));
             if (!rules) {
@@ -506,7 +500,6 @@
             }
         }
 
-        // --- Questions Management ---
         function getQuestionsFromStorage() {
             let questions = JSON.parse(localStorage.getItem('policeQuestionsList'));
             if (!questions) {
@@ -573,7 +566,6 @@
             }
         }
 
-        // --- Explanations Management ---
         function getExplanationsFromStorage() {
             let explanations = JSON.parse(localStorage.getItem('policeExplanationsList'));
             if (!explanations) {
